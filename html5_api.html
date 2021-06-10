@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="My first steps in the WEB">
+    <meta name="keywords" content="HTML, CSS, JavaScript">
+    <meta name="author" content="Serge">
+    <style>
+        h1 {
+            color: dodgerblue;
+            border-width: thick;
+            border-style: double;
+            text-align: center
+        }
+        h3 {
+            color: darkblue;
+        }
+        #div1 {
+            width: 300px;
+            height: 200px;
+            padding: 10px;
+            border: 1px solid #aaaaaa;
+        }
+        #div2, #div3, #div4, #div5 {
+            float: left;
+            width: 300px;
+            height: 200px;
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid black;
+        }
+    </style>
+    <script>
+    function allowDrop(ev) {
+        ev.preventDefault();
+    }
+
+    function drag(ev) {
+        ev.dataTransfer.setData("text", ev.target.id);
+    }
+
+    function drop(ev) {
+        ev.preventDefault();
+        var data = ev.dataTransfer.getData("text");
+        ev.target.appendChild(document.getElementById(data));
+    }
+    </script>
+    <script>
+    function clickCounter() {
+        if(typeof(Storage) !== "undefined") {
+            if (localStorage.clickcount) {
+                localStorage.clickcount = Number(localStorage.clickcount)+1;
+            } else {
+                localStorage.clickcount = 1;
+            }
+            document.getElementById("result2").innerHTML =
+                "Вы нажали на кнопку " + localStorage.clickcount + " time(s).";
+        } else {
+            document.getElementById("result2").innerHTML =
+                "Извините, Ваш браузер не поддерживает веб-хранилище...";
+        }
+    }
+    </script>
+    <script>
+    function clickCounter3() {
+        if(typeof(Storage) !== "undefined") {
+            if (sessionStorage.clickcount) {
+                sessionStorage.clickcount = Number(sessionStorage.clickcount)+1;
+            } else {
+                sessionStorage.clickcount = 1;
+            }
+            document.getElementById("result3").innerHTML =
+                "Вы нажали на кнопку " + sessionStorage.clickcount + " time(s) в этой сессии.";
+        } else {
+            document.getElementById("result3").innerHTML =
+                "Извините, Ваш браузер не поддерживает веб-хранилище...";
+        }
+    }
+    </script>
+
+    <title>HTML5 API</title>
+</head>
+<body>
+<h1>HTML5 Геолокация API</h1>
+    <p>API геолокации HTML используется для определения местоположения пользователя.</p>
+    <p>Примечание: Геолокация наиболее точна для устройств с GPS, таких как смартфон.</p>
+    <p>Примечание: Начиная с Chrome 50, API геолокации будет работать только в безопасных контекстах, таких как HTTPS. Если ваш сайт размещен на незащищенном источнике (например, HTTP), запросы на получение местоположения пользователей больше не будут работать.</p>
+    <p><strong>Использование геолокации HTML</strong><br>
+      <strong>Метод getCurrentPosition()</strong> используется для возврата позиции
+      пользователя.<br>
+      Приведенный ниже пример возвращает широту и долготу положения пользователя:</p>
+<h3>HTML Получить координаты геолокации</h3>
+
+        <button onclick="getLocation()">Попробовать</button>
+
+        <p id="demo"></p>
+
+        <script>
+        var x = document.getElementById("demo");
+
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition);
+            } else {
+                x.innerHTML = "Браузер не поддерживает геолокацию.";
+            }
+        }
+
+        function showPosition(position) {
+            x.innerHTML = "Широта: " + position.coords.latitude +
+            "<br>Долгота: " + position.coords.longitude;
+        }
+        </script>
+    <p>Объяснение примера:</p>
+    <ul>
+        <li>Проверьте, поддерживается ли геолокация</li>
+        <li>Если поддерживается, запустите метод getCurrentPosition(). Если нет, отображается сообщение пользователю</li>
+        <li>Если метод getCurrentPosition() успешен, он возвращает объект координат функции, указанной в параметре (showPosition)</li>
+        <li>Функция showPosition() выводит широту и долготу</li>
+    </ul>
+    <p>Приведенный выше пример - очень простой скрипт геолокации, без обработки
+        ошибок.</p>
+    <p>Обработка ошибок и отклонений</p>
+    <p>Второй параметр системы, метод getCurrentPosition() используется для обработки ошибок. Он указывает функцию для запуска, если ей не удается получить местоположение пользователя:</p>
+<h3>HTML Обработка ошибок геолокации</h3>
+
+    <p>Нажмите кнопку, чтобы получить координаты.</p>
+
+    <button onclick="getLocation2()">Попробовать</button>
+
+    <p id="demo2"></p>
+
+    <script>
+    var x = document.getElementById("demo2");
+
+    function getLocation2() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition2, showError2);
+        } else {
+            x.innerHTML = "Браузер не поддерживает геолокацию.";
+        }
+    }
+
+    function showPosition2(position) {
+        x.innerHTML = "Широта: " + position.coords.latitude +
+        "<br>Долгота: " + position.coords.longitude;
+    }
+
+    function showError2(error) {
+        switch(error.code) {
+            case error.PERMISSION_DENIED:
+                x.innerHTML = "Пользователь отклонил запрос на геолокацию."
+                break;
+            case error.POSITION_UNAVAILABLE:
+                x.innerHTML = "Информация о местоположении недоступна."
+                break;
+            case error.TIMEOUT:
+                x.innerHTML = "Запрос на получение тайм-аута местоположения пользователя."
+                break;
+            case error.UNKNOWN_ERROR:
+                x.innerHTML = "Произошла неизвестная ошибка."
+                break;
+        }
+    }
+    </script>
+    <p><strong>Отображение результата на карте</strong><br>
+        Чтобы отобразить результат на карте, вам нужен доступ к картографическому
+        сервису, например Google Maps.<br>
+        В приведенном ниже примере возвращенные широта и долгота используются для отображения местоположения на карте Google (с использованием статического изображения):</p>
+    <code>function showPosition(position) {<br>
+      var latlon = position.coords.latitude + "," +
+        position.coords.longitude;<br><br>
+        var img_url = "https://maps.googleapis.com/maps/api/staticmap?center=<br>
+      "+latlon+"&zoom=14&size=400x300&sensor=false&key=YOUR_KEY";<br><br>
+
+      document.getElementById("mapholder").innerHTML = "&#8249!img src='"+img_url+"'&#8250";
+    }</code>
+    <p>Информация о местоположении<br>
+    На этой странице показано, как отобразить положение пользователя на карте.<br>
+        Геолокация также очень полезна для получения специфической информации о местоположении, например:</p>
+    <ul>
+        <li>Актуальная местная информация</li>
+        <li>Отображение точек интереса рядом с пользователем</li>
+        <li>Пошаговая навигация (GPS)</li>
+    </ul>
+    <p><strong>Метод getCurrentPosition()</strong> - возвращает данные
+    Метод getCurrentPosition() возвращает объект при успешном выполнении. Свойства широта, долгота и точность всегда возвращаются. Остальные свойства возвращаются, если они доступны:</p>
+    <p>Свойство	Возврат<br>
+        <strong>coords.latitude</strong>	Широта в виде десятичного числа (всегда
+                            возвращается)<br>
+        <strong>coords.longitude</strong>	Долгота в виде десятичного числа (всегда
+        возвращается)<br>
+        <strong>coords.accuracy</strong>	Точность положения (всегда возвращается)<br>
+        <strong>coords.altitude</strong>	Высота в метрах над средним уровнем моря
+        (возвращается, если имеется)<br>
+        <strong>coords.altitudeAccuracy</strong>	Точность определения высоты положения
+        (возвращается, если имеется)<br>
+        <strong>coords.heading</strong>	Курс в градусах по часовой стрелке от Севера
+        (возвращается, если имеется)<br>
+        <strong>coords.speed</strong>	Скорость в метрах в секунду (возвращается, если
+        имеется)<br>
+        <strong>timestamp</strong>	Дата/Время ответа (возвращается, если имеется)</p>
+
+<h3>Геолокация объекта - другие интересные методы</h3>
+    <p>Объект геолокации также имеет другие интересные методы:</p>
+    <ul>
+        <li><code>watchPosition()</code> - Возвращает текущее положение
+            пользователя и продолжает возвращать обновленное положение по мере
+            движения пользователя (например, GPS в автомобиле).</li>
+        <li><code>clearWatch()</code> - Останавливает работу метод
+            <code>watchPosition()</code>.</li>
+    </ul>
+<p>В приведенном ниже примере показано следующее: метод watchPosition(). Вам нужно точное GPS устройство, чтобы проверить это (например, смартфон):</p>
+<h3>HTML Получить геолокации смартфон</h3>
+
+    <p>Нажмите кнопку, чтобы получить координаты.</p>
+
+    <button onclick="getLocation3()">Попробовать</button>
+
+    <p id="demo3"></p>
+
+    <script>
+    var x = document.getElementById("demo3");
+
+    function getLocation3() {
+        if (navigator.geolocation) {
+            navigator.geolocation.watchPosition(showPosition3);
+        } else {
+            x.innerHTML = "Браузер не поддерживает геолокацию.";}
+        }
+
+    function showPosition3(position) {
+        x.innerHTML="Широта: " + position.coords.latitude +
+        "<br>Долгота: " + position.coords.longitude;
+    }
+    </script>
+
+<h1>HTML5 Перетаскивание API</h1>
+    <p>В HTML любой элемент можно перетащить и удалит</p>
+    <p>Схватать и сбросить
+    Перетаскивание - очень распространенная функция. Это когда вы "хватаете" объект и перетаскиваете его в другое место.</p>
+    <h3>HTML Перетаскивание</h3>
+
+    <p>Перетащите изображение lady_knees в прямоугольник:</p>
+
+    <div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+    <br>
+    <img id="drag1" src="pictures/lady_knees.png" alt="lady_knees" draggable="true"
+         ondragstart="drag(event)"
+         width="300" height="200">
+    <p>Это может показаться сложным, но давайте пройдемся по всем различным частям события перетаскивания.</p>
+    <p><strong>Сделать элемент перетаскиваемым</strong></p>
+        <p>Прежде всего: чтобы сделать элемент перетаскиваемым, установите атрибут draggable в true:</p>
+        <code>img draggable="true"</code>
+    <p><strong>Что схватывает - ondragstart и setData()</strong></p>
+        <p>Затем укажите, что должно произойти при перетаскивании элемента.<br>
+            В приведенном выше примере атрибут ondragstart вызывает функцию
+            drag(event), которая определяет, какие данные следует перетаскивать.<br>
+            Метод dataTransfer.setData() задает тип данных и значение перетаскиваемых данных</p>
+        <code>function drag(ev) {<br>
+          ev.dataTransfer.setData("text", ev.target.id);<br>
+        }</code>
+        <p>В этом случае тип данных является "text" и значение - это идентификатор перетаскиваемого элемента ("drag1").</p>
+    <p><strong>Куда сбросить - ondragover</strong><br><p>
+        <p>Событие ondragover указывает, куда могут быть отброшены перетаскиваемые
+            данные.<br>
+            По умолчанию данные/элементы не могут быть удалены в другие элементы.
+            Чтобы разрешить падение, мы должны предотвратить обработку элемента по
+            умолчанию.<br>
+            Это делается путем вызова метода event.preventDefault() для события ondragover:</p>
+        <code>event.preventDefault()</code>
+    <p><strong>Сделайте сброс - ondrop</strong></p>
+        <p>Когда перетаскиваемые данные отбрасываются, происходит событие
+            отбрасывания.<br>
+            В приведенном выше примере атрибут ondrop вызывает функцию drop(event):</p>
+        <code>function drop(ev) {<br>
+          ev.preventDefault();<br>
+          var data = ev.dataTransfer.getData("text");<br>
+          ev.target.appendChild(document.getElementById(data));<br>
+        }</code>
+    <p>Объяснение кода:</p>
+    <ul>
+        <li>Вызовите функцию preventDefault(), чтобы предотвратить обработку данных браузером по умолчанию (по умолчанию открывается как ссылка при выпадении)</li>
+        <li>Получите перетаскиваемые данные с помощью метода dataTransfer.getData(). Этот метод вернет все данные, которые были заданы в том же типе в методе setData()</li>
+        <li>Перетаскиваемые данные - это идентификатор перетаскиваемого элемента ("drag1")</li>
+        <li>Добавить перетаскиваемый элемент в элемент</li>
+    </ul>
+    <h3>HTML Перетаскивание вперед и назад</h3>
+
+    <h3>Схватить и сбросить</h3>
+    <p>Перетащите изображение вперед и назад между четырмя элементами div.</p>
+
+    <div id="div2" ondrop="drop(event)" ondragover="allowDrop(event)">
+      <img src="pictures/lady_knees.png" draggable="true" alt="lady_knees"
+           ondragstart="drag(event)" id="drag2" width="300" height="200">
+    </div>
+
+    <div id="div3" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+    <div id="div4" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+    <div id="div5" ondrop="drop(event)"
+         ondragover="allowDrop(event)"></div>
+   <p><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+       <br><br><br><br><br><br><br><br><br></p>
+
+<h1>HTML5 Веб хранилище API</h1>
+    <p>HTML Веб хранилище; лучше, чем файлы cookie.</p>
+    <p>Что такое HTML веб хранилище?</p>
+    <p>С помощью веб хранилища, веб приложения могут сохранять данные локально в
+        браузере пользователя.<br>
+        До появления HTML5 данные приложений должны были храниться в файлах cookie,
+        включаемых в каждый запрос сервера. Веб хранилище является более
+        безопасным, и большие объемы данных могут храниться локально, не влияя на
+        производительность веб сайта.<br>
+        В отличие от файлов cookie, лимит хранения намного больше (не менее 5
+        Мб), и информация никогда не передается на сервер.<br>
+        Веб хранилище предназначено для каждого источника (для каждого домена и протокола). Все страницы из одного источника могут хранить и получать доступ к одним и тем же данным.</p>
+    <h3>Объекты веб хранилища HTML</h3>
+        <p>HTML веб хранилище предоставляет два объекта для хранения данных клиента:<br>
+            <code>window.localStorage</code> - хранит данные без срока годности<br>
+            <code>window.sessionStorage</code> - сохраняет данные за один сеанс (данные теряются
+            при закрытии вкладки браузера)<br>
+            Перед использованием веб хранилища проверьте поддержку браузером localStorage и sessionStorage:</p>
+            <pre><code>if (typeof(Storage) !== "undefined") {
+              // Код для localStorage/sessionStorage.
+            } else {
+              // Прости! Нет поддержки веб хранилища.
+            }</code></pre>
+    <h4>Объект <code>localStorage</code></h4>
+        <p>Объект localStorage хранит данные без даты истечения срока действия. Данные не будут удалены при закрытии браузера и будут доступны на следующий день, неделю или год.</p>
+        <div id="result"></div>
+
+        <script>
+        // Проверка поддержки браузера
+        if (typeof(Storage) !== "undefined") {
+            // Хранить
+            localStorage.setItem("lastname", "Serge");
+            // Возвращать
+            document.getElementById("result").innerHTML = localStorage.getItem("lastname");
+        } else {
+            document.getElementById("result").innerHTML = "Извините, Ваш браузер не поддерживает веб-хранилище...";
+        }
+        </script>
+        <p>Объяснение примера:<br>
+
+        - Создайте пару имя/значение локального хранилища с помощью
+            <code>name="lastname" и value="Smith"</code><br>
+        - Получить значение "lastname" и вставьте его в элемент с помощью
+            <code>id="result"</code><br>
+        Приведенный выше пример также можно было бы написать так:</p>
+        <pre><code>// Хранить
+        localStorage.lastname = "Smith";
+        // Извлечь
+        document.getElementById("result").innerHTML = localStorage.lastname;</code></pre>
+        <p>Синтаксис для удаления "lastname" элемент localStorage выглядит следующим образом:</p>
+        <code>localStorage.removeItem("lastname");</code>
+        <p>Примечание: Пары имя/значение всегда хранятся в виде строк. Не забудьте
+            конвертировать их в другой формат, если это необходимо!<br>
+            В следующем примере подсчитывается количество нажатий кнопки пользователем.
+            В этом коде строка значения преобразуется в число, чтобы иметь возможность увеличить счетчик:</p>
+    <h3>HTML Постоянно хранение нажатие кнопки</h3>
+        <p><button onclick="clickCounter()" type="button">Нажмите меня!</button></p>
+        <div id="result2"></div>
+        <p>Нажмите кнопку, чтобы увидеть увеличение счетчика.</p>
+        <p>Закройте вкладку браузера (или окно) и повторите попытку, счетчик продолжит считать (не сбрасывается).</p>
+        <h4>Объект <code>sessionStorage</code></h4>
+        <p>Объект <code>sessionStorage</code> объект равен объекту
+            <code>localStorage</code>, кроме того, что он хранит данные только для
+            одного сеанса. Данные удаляются, когда пользователь закрывает
+            определенную вкладку браузера.<br>
+            В следующем примере подсчитывается количество раз, когда пользователь нажал кнопку в текущем сеансе:</p>
+    <h3>HTML Сохранение нажатие кнопки для сеанса</h3>
+        <p><button onclick="clickCounter3()" type="button">Нажмите меня!</button></p>
+        <div id="result3"></div>
+        <p>Нажмите кнопку, чтобы увидеть увеличение счетчика.</p>
+        <p>Закройте вкладку браузера (или окно) и повторите попытку, счетчик продолжит считать (не сбрасывается).</p>
+
+<h1>HTML5 Веб работник API</h1>
+    <p>Веб работник - это JavaScript, работающий в фоновом режиме, не влияя на производительность страницы.</p>
+    <p>Что такое веб работник?</p>
+    <p>При выполнении сценариев на HTML странице страница перестает отвечать на
+        запросы до тех пор, пока сценарий не будет завершен.<br>
+        Веб работник - это JavaScript, который работает в фоновом режиме, независимо от других сценариев, не влияя
+        на производительность страницы. Вы можете продолжать делать все, что хотите: щелкать, выбирать вещи и т.д., В то время когда веб работник работает в фоновом режиме.</p>
+    <p>Пример HTML Веб работника<br>В приведенном ниже примере создается простой веб работник, который считает числа в фоновом режиме:</p>
+    <p>Счет чисел: <output id="result4"></output></p>
+    <button onclick="startWorker()">Старт веб работник</button>
+    <button onclick="stopWorker()">Стоп веб работник</button>
+
+    <script>
+    var w;
+
+    function startWorker(){
+       if(typeof(Worker) !== "undefined"){
+            if(typeof(w) == "undefined") {
+                w = new Worker("demo_workers.js");
+            }
+            w.onmessage = function(event) {
+                document.getElementById("result4").innerHTML = event.data;
+            };
+       }else{
+           document.getElementById("result4").innerHTML =
+               "К сожалению! Нет поддержки веб работника";
+       }
+    }
+    function stopWorker(){
+       w.terminate();
+        w = undefined;
+    }
+    </script>
+    <p>Проверьте поддержку веб работника<br>
+    Перед созданием веб работника проверьте, поддерживает ли его браузер пользователя:</p>
+        <pre><code>if (typeof(Worker) !== "undefined") {
+          // Да! Поддержка веб работников!
+          // Некоторый код.....
+        } else {
+          // Прости! Нет поддержки веб работников.
+        }</code></pre>
+    <h3>Создание файла worker</h3>
+        <p>Теперь давайте создадим нашего веб работника во внешнем JavaScript.<br>
+            Здесь мы создаем сценарий, который имеет значение. Скрипт хранится в файле "demo_workers.js":</p>
+        <pre><code>var i = 0;
+
+        function timedCount() {
+          i = i + 1;
+          postMessage(i);
+          setTimeout("timedCount()",500);
+        }
+
+        timedCount();</code></pre>
+        <p>Важной частью приведенного выше кода является метод postMessage() -
+            который используется для отправки сообщения обратно на HTML страницу.<br>
+            Примечание: Обычно веб работники используются не для таких простых сценариев, а для более интенсивных задач CPU.</p>
+    <h3>Создание объекта worker</h3>
+        <p>Теперь, когда у нас есть файл worker, нам нужно вызвать его с HTML страницы.<br>
+            В следующих строках проверяется, существует ли работник, если нет - он создает новый объект worker и запускает код в "demo_workers.js":</p>
+        <pre><code>if (typeof(w) == "undefined") {
+          w = new Worker("demo_workers.js");
+        }</code></pre>
+        <p>Затем мы можем отправлять и получать сообщения от веб работника.<br>
+            Добавить слушатель событий "onmessage" для веб работника.</p>
+        <pre><code>w.onmessage = function(event){
+          document.getElementById("result").innerHTML = event.data;
+        };</code></pre>
+        <p>Когда веб работник отправляет сообщение, выполняется код в прослушивателе событий.
+            Данные веб работника хранятся в event.data.</p>
+    <h3>Завершение работы веб работника</h3>
+        <p>При создании объекта worker он будет продолжать прослушивать сообщения
+            (даже после завершения работы внешнего скрипта) до тех пор, пока не
+            завершит работу.<br>
+            Чтобы завершить работу веб работника и освободить ресурсы браузера/компьютера, используйте метод terminate():
+            <code>w.terminate();</code>
+    <h3>Повторное использование веб работника</h3>
+        <p>Если вы зададите переменной worker значение undefined, то после ее
+            завершения вы сможете повторно использовать код:<br>
+            <code>w = undefined;</code>
+    <h3>Пример Полного кода worker</h3>
+        <p>Мы уже видели рабочий код в файле .js. Ниже приведен код для HTML страницы:</p>
+        <img src="pictures/worker_code.png" alt="worker code" height="861"
+             width="1000"/>
+    <h3>Веб работники и DOM</h3>
+        <p>Поскольку веб работники находятся во внешних файлах, они не имеют доступа к следующим объектам JavaScript:</p>
+        <ul>
+            <li>Объект window</li>
+            <li>Объект document</li>
+            <li>Объект parent</li>
+        </ul>
+
+        <h1>HTML5 События отправлено сервером API</h1>
+        <p><strong>Server-Sent Events (SSE)</strong> Разрешить веб странице получать
+            обновления с сервера.</p>
+    <h3>Server-Sent Events - Односторонний обмен сообщениями</h3>
+        <p>Событие, отправленное сервером - это когда веб страница автоматически
+            получает обновления с сервера.<br>
+            Это было возможно и раньше, но веб страница должна была спросить,
+            доступны ли какие либо обновления. С событиями, отправленными сервером,
+            обновления приходят автоматически.<br>
+            Примеры: обновления Facebook/Twitter, обновления цен на акции, новостные ленты, спортивные результаты и т.д.</p>
+        <h3>Получение уведомлений о событиях, отправленных сервером</h3>
+        <p>Объект EventSource используется для получения уведомлений о событиях, отправленных сервером:</p>
+        <div id="result5"></div>
+
+        <script>
+        if(typeof(EventSource) !== "undefined") {
+            var source = new EventSource("demo_sse.php");
+            source.onmessage = function(event) {
+                document.getElementById("result5").innerHTML += event.data + "<br>";
+            };
+        } else {
+            document.getElementById("result5").innerHTML =
+                "Извините, Ваш браузер не поддерживает события, отправленные сервером...";
+        }
+        </script>
+        <p>Объяснение примера:<br>
+        - Создайте новый объект EventSource и укажите URL- дрес страницы, отправляющей
+            обновления (в файл "demo_sse.php")<br>
+        - Каждый раз при получении обновления происходит событие onmessage<br>
+        - Когда происходит событие onmessage, поместите полученные данные в элемент с
+            помощью id="result"</p>
+        <p>Проверьте поддержку событий, отправленных сервером</p>
+        <p>В приведенном выше примере, было несколько дополнительных строк кода для проверки поддержки браузером событий, отправленных сервером:</p>
+        <pre><code>if(typeof(EventSource) !== "undefined") {
+          // Да! Поддержка событий, отправляемых сервером!
+          // Некоторый код.....
+        } else {
+          // Прости! Поддержка событий, отправляемых сервером, отсутствует.
+        }</code></pre>
+        <p>Пример кода на сервере</p>
+        <p>Для работы приведенного выше примера вам нужен сервер, способный
+            отправлять обновления данных (например, PHP или ASP).<br>
+            Синтаксис потока событий на стороне сервера прост. Установите header
+            "Content-Type" к "text/event-stream". Теперь вы можете начать отправлять
+            потоки событий.<br>
+            Код на PHP (demo_sse.php):</p>
+        <pre><code>&#8249!?php
+        header('Content-Type: text/event-stream');
+        header('Cache-Control: no-cache');
+
+        $time = date('r');
+        echo "data: Серверное время: {$time}\n\n";
+        flush();
+        ?&#8250</code></pre>
+        <p>Код на ASP (VB) (demo_sse.asp):</p>
+        <pre><code><%
+        Response.ContentType = "text/event-stream"
+        Response.Expires = -1
+        Response.Write("data: Серверное время: " & now())
+        Response.Flush()
+        %></code></pre>
+        <p>Объяснение кода:</p>
+        <ul>
+            <li>Установите header "Content-Type" к "text/event-stream"</li>
+            <li>Укажите, что страница не должна кэшироваться</li>
+            <li>Выведите данные для отправки (Всегда старт с "data:")</li>
+            <li>Сбросьте выходные данные обратно на веб страницу</li>
+        </ul>
+    <h3>Объект EventSource</h3>
+        <p>В приведенных выше примерах мы использовали событие onmessage для получения сообщений. Но доступны и другие события:
+        <ul>
+            <li><strong>onopen</strong>	При открытии соединения с сервером</li>
+            <li><strong>onmessage</strong>	Когда сообщение получено</li>
+            <li><strong>onerror</strong>	При возникновении ошибки</li>
+        </ul>
+</body>
+</html>
