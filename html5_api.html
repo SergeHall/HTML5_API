@@ -437,7 +437,7 @@
           w = new Worker("demo_workers.js");
         }</code></pre>
         <p>Затем мы можем отправлять и получать сообщения от веб работника.<br>
-            Добавить слушатель событий "onmessage" для web работника.</p>
+            Добавить слушатель событий "onmessage" для веб работника.</p>
         <pre><code>w.onmessage = function(event){
           document.getElementById("result").innerHTML = event.data;
         };</code></pre>
